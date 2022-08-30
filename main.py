@@ -8,7 +8,7 @@ pygame.init()
 clock = pygame.time.Clock()
 width, height = 800, 600
 
-press_dict = {pygame.K_w: (0, -1), pygame.K_a: (-1, 0), pygame.K_s: (0, 1), pygame.K_d: (1, 0)}
+press_dict = {pygame.K_w: (0, -2), pygame.K_a: (-2, 0), pygame.K_s: (0, 2), pygame.K_d: (2, 0)}
 
 screen = pygame.display.set_mode((width, height))
 background_color = [(0, 0, 0),
@@ -38,6 +38,9 @@ eat_coin = pygame.mixer.Sound("sound/add_score.mp3")
 pygame.mixer.music.load("sound/Ari Pulkkinen - Title Theme.mp3")
 pygame.mixer.music.play(-1, 0)
 pygame.mixer.music.set_volume(0.3)
+
+# with open("data.dat", "r") as f:
+#     max_score = f.read(1024)
 
 while not game_over:
 
@@ -152,7 +155,7 @@ while not game_over:
             scores += 100
             dollar_list.remove(dollar)
             eat_coin.play()
-            eat_coin.set_volume(0.5)
+            eat_coin.set_volume(0.3)
 
     if game_over:
         font = pygame.font.SysFont("YaHei", 60)
@@ -163,7 +166,7 @@ while not game_over:
         screen.blit(bmp_game_over, (width / 2 - bmp_rect.width / 2, height / 2 - bmp_rect.height / 2))
 
         game_over_sound.play()
-        game_over_sound.set_volume(0.5)
+        game_over_sound.set_volume(0.3)
     else:
         font_color = (255, 255, 255)
         str_tip = "Current:%s" % scores
