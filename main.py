@@ -13,7 +13,8 @@ press_dict = {pygame.K_w: (0, -1), pygame.K_a: (-1, 0), pygame.K_s: (0, 1), pyga
 screen = pygame.display.set_mode((width, height))
 background_color = [(0, 0, 0),
                     (128, 128, 33),
-                    (33, 33, 128), ]
+                    (33, 33, 128),
+                    (255, 255, 255) ]
 
 background_color_idx = 0
 bird = pygame.image.load("pic/angry-birds.png")
@@ -30,6 +31,13 @@ ball_list = []
 dollar_list = []
 scores = 0
 cnt = 0
+
+pygame.mixer.init()
+game_over_sound = pygame.mixer.Sound("sound/game_over.ogg")
+eat_coin = pygame.mixer.Sound("sound/add_score.mp3")
+pygame.mixer.music.load("sound/Ari Pulkkinen - Title Theme.mp3")
+pygame.mixer.music.play(-1, 0)
+pygame.mixer.music.set_volume(0.3)
 
 while not game_over:
 
@@ -111,6 +119,7 @@ while not game_over:
         ball_rect = ball["rect"]
         if ball_rect.left < 0:
             ball_list.remove(ball)
+            scores += 10
         else:
             ball["rect"] = ball_rect.move(-1, 0)
             screen.blit(ball["body"], ball["rect"])
@@ -142,6 +151,8 @@ while not game_over:
         if bird_rect.colliderect(dollar_rect):
             scores += 100
             dollar_list.remove(dollar)
+            eat_coin.play()
+            eat_coin.set_volume(0.5)
 
     if game_over:
         font = pygame.font.SysFont("YaHei", 60)
@@ -150,6 +161,9 @@ while not game_over:
         bmp_game_over = font.render(str_tip, False, font_color)
         bmp_rect = bmp_game_over.get_rect()
         screen.blit(bmp_game_over, (width / 2 - bmp_rect.width / 2, height / 2 - bmp_rect.height / 2))
+
+        game_over_sound.play()
+        game_over_sound.set_volume(0.5)
     else:
         font_color = (255, 255, 255)
         str_tip = "Current:%s" % scores
@@ -161,6 +175,7 @@ while not game_over:
 
 
 while True:
+    pygame.mixer.music.stop()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
